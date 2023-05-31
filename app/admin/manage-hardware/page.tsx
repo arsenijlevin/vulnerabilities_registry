@@ -4,7 +4,7 @@ import Logout from '@app/components/Logout';
 import { Box } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TableWithPagination from '../../components/table-with-pagination/TableWithPagination';
-import { useQueryOptions } from '@/lib/useQueryOptions';
+import { useQueryOptions } from '@lib/useQueryOptions';
 
 export const metadata = {
   title: 'Оборудование'

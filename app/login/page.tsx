@@ -5,7 +5,7 @@ import { useRef } from 'react';
 
 import { useRouter } from "next/navigation"
 import ClientOnly from './components/ClientOnly';
-import { LoginData } from '../api/auth/login/types';
+import { LoginData } from '@api/auth/login/types';
 import { processLogin } from './lib/processLogin';
 import { setCookie } from 'cookies-next';
 

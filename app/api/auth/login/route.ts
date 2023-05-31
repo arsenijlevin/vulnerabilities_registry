@@ -2,7 +2,7 @@ import { compare } from "bcrypt";
 import { sign, Secret } from 'jsonwebtoken';
 import { NextRequest, NextResponse } from 'next/server'
 import { LoginData, SessionUser } from "./types";
-import prisma from "@/prisma/prismadb";
+import prisma from "@prisma/prismadb";
 
 
 export async function POST(request: NextRequest) {
