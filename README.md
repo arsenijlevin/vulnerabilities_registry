@@ -1,7 +1,7 @@
 ## Переменные окружения (.env)
 
 ```
-DATABASE_URL=postgres://<login>:<password>@<host>:<port>/postgres
+DATABASE_URL=postgres://<login>:<password>@<host>:<port>/<dbname>
 NEXTAUTH_URL=http://localhost:3000/
 SECRET_KEY=verysecretkey
 ```
@@ -23,5 +23,3 @@ $ npx prisma db generate # Генерация типов на основе та�
 $ npm run dev
 
 ```
-
-[http://localhost:3000](http://localhost:3000)
