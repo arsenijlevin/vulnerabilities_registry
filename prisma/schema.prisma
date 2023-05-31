@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model hardware {
+  id                    Int                 @id @default(autoincrement())
+  name                  String
+  long_text_description String?
+  location              Int
+  hardware_location     hardware_location[]
+  vuln_hardware         vuln_hardware[]
+}
+
+model rights {
+  id    Int     @id @default(autoincrement())
+  title String
+  users users[]
+}
+
+model users {
+  login     String @id
+  password  String
+  rights_id Int
+  rights    rights @relation(fields: [rights_id], references: [id], map: "right_id")
+
+  @@index([rights_id], map: "fki_reig")
+}
+
+model vulnerabilities {
+  id                    Int             @id @default(autoincrement())
+  name                  String
+  discovery_date        DateTime?       @db.Date
+  is_fixed              Boolean?
+  long_text_description String?
+  vuln_hardware         vuln_hardware[]
+  vuln_types            vuln_types[]
+}
+
+model hardware_location {
+  location_id Int
+  hardware_id Int
+  hardware    hardware  @relation(fields: [hardware_id], references: [id], map: "hardware")
+  locations   locations @relation(fields: [location_id], references: [id], map: "location")
+
+  @@id([location_id, hardware_id])
+}
+
+model locations {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  description       String?
+  hardware_location hardware_location[]
+}
+
+model vuln_hardware {
+  vulnerability_id Int
+  hardware_id      Int
+  hardware         hardware        @relation(fields: [hardware_id], references: [id], map: "hard")
+  vulnerabilities  vulnerabilities @relation(fields: [vulnerability_id], references: [id], map: "vuln")
+
+  @@id([vulnerability_id, hardware_id])
+}
+
+model vuln_types {
+  vuln_id         Int
+  type_id         Int
+  vuln_types_list vuln_types_list @relation(fields: [type_id], references: [id], map: "type")
+  vulnerabilities vulnerabilities @relation(fields: [vuln_id], references: [id], map: "vuln")
+
+  @@id([vuln_id, type_id])
+}
+
+model vuln_types_list {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  vuln_types  vuln_types[]
+}
