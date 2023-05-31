@@ -3,7 +3,7 @@
 import { LoginData } from "@api/auth/login/types";
 
 export async function processLogin(loginData : LoginData) {
-  const response = await fetch(`${process.env.NEXTAUTH_URL}api/login`, {
+  const response = await fetch(`${process.env.NEXTAUTH_URL}api/auth/login`, {
     method: 'POST',
     headers: {
       'Access-Control-Allow-Origin': '*',

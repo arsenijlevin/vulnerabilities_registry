@@ -1,7 +1,7 @@
-"use server"
+"use client"
 
 export async function deleteUser(login : string | number) {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}api/users/delete`, {
+  const res = await fetch(`/api/users/delete`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

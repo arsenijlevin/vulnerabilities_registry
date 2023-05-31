@@ -1,5 +1,5 @@
 import './globals.css'
-import Providers from './components/provider'
+import ProvidesTheQueryClient from './provider'
 
 export const metadata = {
   title: 'Реестр уязвимостей оборудования',
@@ -15,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body>
-        <Providers>{children}</Providers>
+        <ProvidesTheQueryClient>
+          {children}
+        </ProvidesTheQueryClient>
       </body>
     </html>
   )
