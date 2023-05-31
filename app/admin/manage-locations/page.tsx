@@ -13,7 +13,7 @@ export const metadata = {
 async function getLocations() {
   const res = await fetch("/api/locations/getAll");
   const locations = await res.json();
-  console.log(locations)
+
   return locations;
 }
 

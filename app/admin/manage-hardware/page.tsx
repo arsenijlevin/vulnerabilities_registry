@@ -13,7 +13,7 @@ export const metadata = {
 async function getHardware() {
   const res = await fetch("/api/hardware/getAll");
   const hardware = await res.json();
-  console.log(hardware)
+
   return hardware;
 }
 

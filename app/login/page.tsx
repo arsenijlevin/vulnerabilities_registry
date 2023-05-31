@@ -36,7 +36,6 @@ export default function LoginPage() {
 
     const jwt = await processLogin(loginData)
 
-    console.log(jwt);
 
     setCookie("jwt", jwt, {
       maxAge: 60 * 60 * 4,

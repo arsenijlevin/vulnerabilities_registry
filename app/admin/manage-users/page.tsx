@@ -5,34 +5,11 @@ import { Box } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TableWithPagination from '../../components/table-with-pagination/TableWithPagination';
 import { useQueryOptions } from '@/lib/useQueryOptions';
+import { getUsers } from './lib/getUsers';
+import { deleteUser } from './lib/deleteUser';
 
 export const metadata = {
   title: 'Управление пользователями'
-}
-
-async function getUsers() {
-  const res = await fetch("/api/users/getAll");
-  const users = await res.json();
-  console.log(users)
-  return users;
-}
-
-async function deleteUser(login : string | number) {
-  const res = await fetch("/api/users/delete", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      login: `${login}`
-    }),
-  });
-
-  if (res.status === 200) {
-    return "OK"
-  }
-
-  return "";
 }
 
 export default function ManageUsers() {
@@ -58,6 +35,7 @@ export default function ManageUsers() {
 
   if (isLoading) return <></>;
   if (isError || !data) return <></>;
+  
   
   return (
     
