@@ -7,7 +7,11 @@ export type UsersWithRights = Prisma.PromiseReturnType<typeof getAllUsersWithRig
 const getAllUsersWithRights = async () => {
   const users = await prisma.users.findMany({
     include: {
-      rights: true,
+      rights: {
+        select: {
+          title: true
+        }
+      },
     },
   });
 
