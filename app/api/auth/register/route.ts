@@ -4,14 +4,14 @@ import bcrypt from "bcrypt";
 import { prisma } from "@prisma/prismadb";
 
 export async function POST(
-  request: Request, 
+  request: Request,
 ) {
   const body = await request.json() as {
     login: string;
     password: string;
     rights_id: number;
   };
-  const { 
+  const {
     login,
     rights_id
   } = body;

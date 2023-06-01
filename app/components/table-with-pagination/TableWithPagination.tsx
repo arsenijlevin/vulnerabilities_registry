@@ -17,7 +17,12 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import { TableHead } from '@mui/material';
 import TooltipModifyButton from './TooltipModifyButton';
 import TooltipDeleteButton from './TooltipDeleteButton';
+import TooltipShowDescriptionButton from './TooltipShowDescriptionButton';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
+type RecordType = string | number | boolean | null;
+type TableDataType = Record<string, RecordType>;
 interface TablePaginationActionsProps {
   count: number;
   page: number;
@@ -87,22 +92,27 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 interface TableProp<T> {
   tableContent: T[],
   headers: Record<string, string | number>[],
-  primaryKey : string | number,
-  deleteHandler: (deleteLogin : string | number) => void,
-  modifyHandler: (modifyLogin : string | number) => void
+  primaryKey: string | number,
+  deleteHandler: (deleteLogin: string | number) => void,
+  onOpenEdit: (isOpen: boolean, hardwareId: number) => void,
+  openDescriptionHandler?: (isOpen: boolean, descriptionData: string) => void,
+  withDescription?: string
+  noProcess?: boolean
 }
 
-export default function CustomPaginationActionsTable<T extends Record<string, string | number>>({ 
+export default function CustomPaginationActionsTable<T extends TableDataType>({
   tableContent,
-  primaryKey, 
+  primaryKey,
   headers,
-  deleteHandler, 
-  modifyHandler 
+  deleteHandler,
+  onOpenEdit,
+  openDescriptionHandler,
+  withDescription,
+  noProcess
 }: TableProp<T>) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tableContent.length) : 0;
 
@@ -120,23 +130,29 @@ export default function CustomPaginationActionsTable<T extends Record<string, st
     setPage(0);
   };
 
-
+  let offset = withDescription ? headers.length + 3 : headers.length + 2;
+  if (noProcess) offset -= 2;
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <TableHeader headers={headers}/>
+        <TableHeader headers={headers} withDescription={withDescription} />
         <TableBody>
           {(rowsPerPage > 0
             ? tableContent.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : tableContent
-          ).map((row, index) => (
-            <DataRow 
-              data={row} 
-              key={index - 1} 
-              id={index} 
-              onDelete={() => deleteHandler(row[primaryKey])} 
-              onUpdate={() => modifyHandler(row[primaryKey])} />
-          ))}
+          ).map((row, index) => {
+            const value: RecordType = row[primaryKey];
+            if (typeof value !== "boolean" && value !== null)
+              return <DataRow
+                data={row}
+                key={index - 1}
+                id={index}
+                onDelete={() => deleteHandler(value)}
+                onOpenDescription={openDescriptionHandler}
+                withDescription={withDescription}
+                onOpenEdit={onOpenEdit}
+                noProcess />
+          })}
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
               <TableCell colSpan={6} />
@@ -147,7 +163,7 @@ export default function CustomPaginationActionsTable<T extends Record<string, st
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={headers.length + 2}
+              colSpan={offset}
               count={tableContent.length}
               rowsPerPage={rowsPerPage}
               page={page}
@@ -169,22 +185,33 @@ export default function CustomPaginationActionsTable<T extends Record<string, st
   );
 }
 
-function TableHeader({ headers } : {headers: Record<string, string | number>[]}) {
+interface TableHeaderProps {
+  headers: Record<string, string | number>[],
+  withDescription?: string,
+  noProcess?: boolean
+}
+
+function TableHeader({ headers, withDescription, noProcess }: TableHeaderProps) {
+  let additionalHeaders = [{
+    title: "Изменить", key: "changeButton",
+  }, {
+    title: "Удалить", key: "deleteButton",
+  }];
+  if (!noProcess) additionalHeaders = []
+
+  withDescription && additionalHeaders.unshift({
+    title: "Описание", key: "descriptionButton",
+  })
 
 
-  headers = headers.concat(
-    [{
-      title: "Изменить", key: "changeButton",
-    }, {
-      title: "Удалить", key: "deleteButton",
-    }]
-  )
-  
+
+  headers = headers.concat(additionalHeaders)
+
 
   return (
     <TableHead>
       <TableRow>
-        {headers.map((header, index) => 
+        {headers.map((header, index) =>
           <TableCell key={index}>{header.title}</TableCell>
         )}
       </TableRow>
@@ -193,25 +220,62 @@ function TableHeader({ headers } : {headers: Record<string, string | number>[]})
 }
 
 interface DataRowProps<T> {
-  data : T, 
-  id : string | number, 
-  onUpdate : () => void, 
-  onDelete : () => void
-  }
+  data: T,
+  id: number,
+  onDelete: () => void,
+  onOpenEdit: (isOpen: boolean, hardwareId: number) => void,
+  onOpenDescription?: (isOpen: boolean, text: string) => void,
+  withDescription?: string,
+  noProcess?: boolean
+}
 
-function DataRow<T extends Record<string, number | string>>({ data, id, onUpdate, onDelete } : DataRowProps<T>) {
+function DataRow<T extends TableDataType>({
+  data,
+  id,
+  onDelete,
+  withDescription,
+  onOpenDescription,
+  onOpenEdit,
+  noProcess
+}: DataRowProps<T>) {
+  let text = "";
 
   return (
     <TableRow key={id}>
-      {Object.keys(data).map((valueKey, index) => (
-        <TableCell key={index}>{data[valueKey]}</TableCell>
-      ))}
-      <TableCell style={{ width: 100 }} align="right">
-        <TooltipModifyButton onClick={onUpdate}/>
-      </TableCell>
-      <TableCell style={{ width: 80 }} align="right">
-        <TooltipDeleteButton onClick={onDelete}/>
-      </TableCell>
+
+      {Object.keys(data).map((valueKey, index) => {
+        const dataValue: RecordType = data[valueKey];
+        if (typeof dataValue === "boolean") {
+          if (dataValue) {
+            return <TableCell key={index}><CheckIcon /></TableCell>
+          } else {
+            return <TableCell key={index}><CloseIcon /></TableCell>
+          }
+        }
+        if (valueKey !== withDescription) {
+          return <TableCell key={index}>{dataValue}</TableCell>
+        }
+        if (dataValue !== null) {
+          text = dataValue.toString();
+        } else {
+          text = "";
+        }
+      })}
+      {withDescription && onOpenDescription ?
+        <TableCell style={{ width: 100 }} align="right">
+          <TooltipShowDescriptionButton onClick={() => onOpenDescription(true, text)} />
+        </TableCell> : <></>
+      }
+
+      {!noProcess && <TableCell style={{ width: 100 }} align="right">
+        <TooltipModifyButton onClick={() => {
+          typeof data.id === "number" && onOpenEdit(true, data.id)
+        }
+        } />
+      </TableCell>}
+      {!noProcess && <TableCell style={{ width: 100 }} align="right">
+        <TooltipDeleteButton onClick={onDelete} />
+      </TableCell>}
     </TableRow>
   )
 }

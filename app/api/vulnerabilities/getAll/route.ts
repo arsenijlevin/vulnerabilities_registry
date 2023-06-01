@@ -14,16 +14,7 @@ const getAllVulnerabilities = async () => {
               title: true
             }
           }
-        }
-      },
-      vuln_hardware: {
-        include: {
-          hardware: {
-            select: {
-              name: true
-            }
-          }
-        }
+        },
       }
     }
   });

@@ -7,6 +7,7 @@ import TableWithPagination from '../../components/table-with-pagination/TableWit
 import { useQueryOptions } from '@/lib/useQueryOptions';
 import { getUsers } from './lib/getUsers';
 import { deleteUser } from './lib/deleteUser';
+import AddButton from '../../components/AddButton';
 
 export const metadata = {
   title: 'Управление пользователями'
@@ -23,7 +24,7 @@ export default function ManageUsers() {
 
 
 
-  const deleteHandler = async (deleteLogin : string | number) => {
+  const deleteHandler = async (deleteLogin: string | number) => {
 
     await deleteUser(deleteLogin);
 
@@ -35,31 +36,32 @@ export default function ManageUsers() {
 
   if (isLoading) return <></>;
   if (isError || !data) return <></>;
-  
-  
+
+
   return (
-    
+
     <section className="py-5 px-10 container mx-auto">
       <h2 className="text-xl md:text-5xl text-center font-bold py-10">
         {metadata.title}
       </h2>
-      <div className="left flex gap-3">
+      <div className="left flex flex-col">
+        <AddButton></AddButton>
         <Logout></Logout>
       </div>
       <Box>
-        <TableWithPagination 
-          tableContent={data} 
+        <TableWithPagination
+          tableContent={data}
           primaryKey="login"
           headers={[
-            { title: "Логин", key:"login" },
+            { title: "Логин", key: "login" },
             { title: "Пароль", key: "password" },
             { title: "Права", key: "rights_id" },
           ]}
-          deleteHandler={deleteHandler} 
-          modifyHandler={() => console.log(5)} />
+          deleteHandler={deleteHandler}
+          onOpenEdit={() => console.log(5)} />
       </Box>
-      
+
     </section>
-    
+
   )
 }

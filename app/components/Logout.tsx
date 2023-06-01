@@ -22,11 +22,11 @@ export default function Logout() {
   };
 
   return (
-    <Box className="success container mx-auto">
+    <Box className="success container mx-auto mb-5">
       <Button
         onClick={handleLogout}
         className="w-28 flex justify-center items-center text-md w-2/9"
-        variant="outlined"
+        variant="contained"
       >
         Выйти
       </Button>

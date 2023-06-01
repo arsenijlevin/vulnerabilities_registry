@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import AddButton from '../components/AddButton';
 import Logout from '../components/Logout';
 
 export const metadata = {
@@ -12,7 +13,8 @@ export default function AdminPage() {
       <h2 className="text-xl md:text-5xl text-center font-bold py-10">
         {metadata.title}
       </h2>
-      <div className="left flex gap-3">
+      <div className="left flex flex-col">
+        <AddButton></AddButton>
         <Logout></Logout>
       </div>
       <div className="container mx-auto flex justify-between py-5 border-b">
