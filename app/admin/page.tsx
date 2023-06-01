@@ -1,17 +1,14 @@
+"use client"
+
 import Link from 'next/link';
 import AddButton from '../components/AddButton';
 import Logout from '../components/Logout';
-
-export const metadata = {
-  title: 'Админ-панель'
-}
-
 
 export default function AdminPage() {
   return (
     <section className="py-5 px-10 container mx-auto">
       <h2 className="text-xl md:text-5xl text-center font-bold py-10">
-        {metadata.title}
+        Админ-панель
       </h2>
       <div className="left flex flex-col">
         <AddButton></AddButton>

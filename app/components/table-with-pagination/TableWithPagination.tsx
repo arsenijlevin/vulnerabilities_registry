@@ -97,7 +97,6 @@ interface TableProp<T> {
   onOpenEdit: (isOpen: boolean, hardwareId: number) => void,
   openDescriptionHandler?: (isOpen: boolean, descriptionData: string) => void,
   withDescription?: string
-  noProcess?: boolean
 }
 
 export default function CustomPaginationActionsTable<T extends TableDataType>({
@@ -107,8 +106,7 @@ export default function CustomPaginationActionsTable<T extends TableDataType>({
   deleteHandler,
   onOpenEdit,
   openDescriptionHandler,
-  withDescription,
-  noProcess
+  withDescription
 }: TableProp<T>) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -130,8 +128,8 @@ export default function CustomPaginationActionsTable<T extends TableDataType>({
     setPage(0);
   };
 
-  let offset = withDescription ? headers.length + 3 : headers.length + 2;
-  if (noProcess) offset -= 2;
+  const offset = headers.length + 2;
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
@@ -150,8 +148,7 @@ export default function CustomPaginationActionsTable<T extends TableDataType>({
                 onDelete={() => deleteHandler(value)}
                 onOpenDescription={openDescriptionHandler}
                 withDescription={withDescription}
-                onOpenEdit={onOpenEdit}
-                noProcess />
+                onOpenEdit={onOpenEdit} />
           })}
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
@@ -187,17 +184,15 @@ export default function CustomPaginationActionsTable<T extends TableDataType>({
 
 interface TableHeaderProps {
   headers: Record<string, string | number>[],
-  withDescription?: string,
-  noProcess?: boolean
+  withDescription?: string
 }
 
-function TableHeader({ headers, withDescription, noProcess }: TableHeaderProps) {
-  let additionalHeaders = [{
+function TableHeader({ headers, withDescription }: TableHeaderProps) {
+  const additionalHeaders = [{
     title: "Изменить", key: "changeButton",
   }, {
     title: "Удалить", key: "deleteButton",
   }];
-  if (!noProcess) additionalHeaders = []
 
   withDescription && additionalHeaders.unshift({
     title: "Описание", key: "descriptionButton",
@@ -225,8 +220,7 @@ interface DataRowProps<T> {
   onDelete: () => void,
   onOpenEdit: (isOpen: boolean, hardwareId: number) => void,
   onOpenDescription?: (isOpen: boolean, text: string) => void,
-  withDescription?: string,
-  noProcess?: boolean
+  withDescription?: string
 }
 
 function DataRow<T extends TableDataType>({
@@ -235,8 +229,7 @@ function DataRow<T extends TableDataType>({
   onDelete,
   withDescription,
   onOpenDescription,
-  onOpenEdit,
-  noProcess
+  onOpenEdit
 }: DataRowProps<T>) {
   let text = "";
 
@@ -266,16 +259,17 @@ function DataRow<T extends TableDataType>({
           <TooltipShowDescriptionButton onClick={() => onOpenDescription(true, text)} />
         </TableCell> : <></>
       }
-
-      {!noProcess && <TableCell style={{ width: 100 }} align="right">
+      <TableCell style={{ width: 100 }} align="right">
         <TooltipModifyButton onClick={() => {
+          console.log(data.id);
+
           typeof data.id === "number" && onOpenEdit(true, data.id)
         }
         } />
-      </TableCell>}
-      {!noProcess && <TableCell style={{ width: 100 }} align="right">
+      </TableCell>
+      <TableCell style={{ width: 100 }} align="right">
         <TooltipDeleteButton onClick={onDelete} />
-      </TableCell>}
+      </TableCell>
     </TableRow>
   )
 }

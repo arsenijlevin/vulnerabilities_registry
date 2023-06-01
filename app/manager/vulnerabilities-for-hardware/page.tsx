@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { getHardware } from '@app/admin/manage-hardware/lib/getHardware';
 import Select from "react-select";
 import DescriptionModal from '../../components/table-with-pagination/DescriptionModal';
+import AddButton from '../../components/AddButton';
 
 export const metadata = {
   title: 'Выбор уязвимостей по оборудованию'
@@ -68,6 +69,7 @@ export default function VulnerabilitiesForHardware() {
         {metadata.title}
       </h2>
       <div className="left flex flex-col">
+        <AddButton></AddButton>
         <Logout></Logout>
       </div>
       <Select onChange={(choice) => changeValue(choice?.value || "-1")} noOptionsMessage={() => 'Не найдено'} placeholder="Оборудование" options={getLabels(rightsQuery.data)} />

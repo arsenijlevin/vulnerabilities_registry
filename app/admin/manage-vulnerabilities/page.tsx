@@ -9,9 +9,10 @@ import { Vulnerabilities } from '../../api/vulnerabilities/getAll/route';
 import { useState } from 'react';
 import DescriptionModal from '../../components/table-with-pagination/DescriptionModal';
 import { DateTime } from "luxon";
+import AddButton from '../../components/AddButton';
 
 export const metadata = {
-  title: 'Местоположения оборудования'
+  title: 'Уязвимости оборудования'
 }
 
 async function getVulnerabilities() {
@@ -96,7 +97,8 @@ export default function ManageVulnerabilities() {
         <h2 className="text-xl md:text-5xl text-center font-bold py-10">
           {metadata.title}
         </h2>
-        <div className="left flex gap-3">
+        <div className="left flex gap-3 flex-col">
+          <AddButton></AddButton>
           <Logout></Logout>
         </div>
         <Box>
