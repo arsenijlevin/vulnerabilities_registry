@@ -8,10 +8,6 @@ import { useQueryOptions } from '@lib/useQueryOptions';
 import { getLocations } from './lib/getLocations';
 import AddButton from '../../components/AddButton';
 
-export const metadata = {
-  title: 'Местоположения оборудования',
-};
-
 async function deleteLocation(login: string | number) {
   const res = await fetch('/api/locations/delete', {
     method: 'POST',
@@ -48,7 +44,7 @@ export default function ManageLocations() {
 
   return (
     <section className="py-5 px-10 container mx-auto">
-      <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
+      <h2 className="text-xl md:text-5xl text-center font-bold py-10">Местоположения оборудования</h2>
       <div className="left flex flex-col">
         <AddButton></AddButton>
         <Logout></Logout>
@@ -63,7 +59,9 @@ export default function ManageLocations() {
             { title: 'Описание', key: 'description' },
           ]}
           deleteHandler={deleteHandler}
-          onOpenEdit={() => console.log(5)}
+          onOpenEdit={() => {
+            console.log(5);
+          }}
         />
       </Box>
     </section>

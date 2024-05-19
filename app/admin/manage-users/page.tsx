@@ -9,10 +9,6 @@ import { getUsers } from './lib/getUsers';
 import { deleteUser } from './lib/deleteUser';
 import AddButton from '../../components/AddButton';
 
-export const metadata = {
-  title: 'Управление пользователями',
-};
-
 export default function ManageUsers() {
   const queryClient = useQueryClient();
 
@@ -31,7 +27,7 @@ export default function ManageUsers() {
 
   return (
     <section className="py-5 px-10 container mx-auto">
-      <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
+      <h2 className="text-xl md:text-5xl text-center font-bold py-10">Управление пользователями</h2>
       <div className="left flex flex-col">
         <AddButton></AddButton>
         <Logout></Logout>
@@ -46,7 +42,9 @@ export default function ManageUsers() {
             { title: 'Права', key: 'rights_id' },
           ]}
           deleteHandler={deleteHandler}
-          onOpenEdit={() => console.log(5)}
+          onOpenEdit={() => {
+            console.log(5);
+          }}
         />
       </Box>
     </section>

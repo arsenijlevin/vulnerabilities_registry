@@ -8,10 +8,6 @@ import { LoginData } from '@api/auth/login/types';
 import { processLogin } from './lib/processLogin';
 import { setCookie } from 'cookies-next';
 
-export const metadata = {
-  title: 'Вход',
-};
-
 export default function LoginPage() {
   const router = useRouter();
   const loginRef = useRef<HTMLInputElement>(null);
@@ -28,8 +24,8 @@ export default function LoginPage() {
     }
 
     const loginData: LoginData = {
-      login: loginRef.current?.value,
-      password: passwordRef.current?.value,
+      login: loginRef.current.value,
+      password: passwordRef.current.value,
     };
 
     const jwt = await processLogin(loginData);
@@ -49,7 +45,7 @@ export default function LoginPage() {
   return (
     <ClientOnly>
       <section className="py-5 container mx-auto px-5 max-w-5xl">
-        <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
+        <h2 className="text-xl md:text-5xl text-center font-bold py-10">Вход</h2>
 
         {/* { isError && <Error message="Неправильный логин или пароль!"></Error>} */}
         {/* { isSuccess && <Success message="Вы успешно вошли в систему!"></Success>} */}

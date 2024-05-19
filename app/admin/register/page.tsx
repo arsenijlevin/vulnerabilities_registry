@@ -10,10 +10,6 @@ import { getRights } from './lib/getRights';
 import { useQueryOptions } from '@lib/useQueryOptions';
 import Select from 'react-select';
 
-export const metadata = {
-  title: 'Регистрация',
-};
-
 export default function LoginPage() {
   const router = useRouter();
   const loginRef = useRef<HTMLInputElement>(null);
@@ -56,7 +52,7 @@ export default function LoginPage() {
   return (
     <ClientOnly>
       <section className="py-5 container mx-auto px-5 max-w-5xl">
-        <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
+        <h2 className="text-xl md:text-5xl text-center font-bold py-10">Регистрация</h2>
 
         {/* { isError && <Error message="Неправильный логин или пароль!"></Error>} */}
         {/* { isSuccess && <Success message="Вы успешно вошли в систему!"></Success>} */}
@@ -87,7 +83,9 @@ export default function LoginPage() {
             <div className="container flex justify-between py-5 flex-col gap-2 w-96">
               <h3>Права: </h3>
               <Select
-                onChange={(choice) => setRights(choice?.value || -1)}
+                onChange={(choice) => {
+                  setRights(choice?.value || -1);
+                }}
                 noOptionsMessage={() => 'Не найдено'}
                 placeholder="Права"
                 options={getRightsLabels(rightsQuery.data)}

@@ -25,5 +25,7 @@ const getAllHardware = async () => {
 export async function GET() {
   const hardware = await getAllHardware();
 
+  console.log(hardware);
+
   return NextResponse.json(hardware);
 }

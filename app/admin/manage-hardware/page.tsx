@@ -13,10 +13,6 @@ import { getHardwareById } from './lib/getHardwareById';
 import { deleteHardware } from './lib/deleteHardware';
 import AddButton from '../../components/AddButton';
 
-export const metadata = {
-  title: 'Оборудование',
-};
-
 export default function ManageHardware() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -25,7 +21,7 @@ export default function ManageHardware() {
 
   const hardwareAllQuery = useQuery(['hardware'], getHardware, useQueryOptions);
 
-  const hardwareByIdQuery = useQuery(['hardware-id'], () => getHardwareById(3), useQueryOptions);
+  const hardwareByIdQuery = useQuery(['hardware-id'], () => getHardwareById(1), useQueryOptions);
 
   const descriptionHandler = (isOpen: boolean, text: string) => {
     setOpen(isOpen);
@@ -46,6 +42,8 @@ export default function ManageHardware() {
     // if (deleteKey === userToUpdate?.login) setFormMode('add');
   };
 
+  console.log(hardwareByIdQuery);
+
   if (hardwareAllQuery.isLoading || hardwareByIdQuery.isLoading) return <></>;
   if (hardwareAllQuery.isError || !hardwareAllQuery.data || hardwareByIdQuery.isError || !hardwareByIdQuery.data)
     return <></>;
@@ -53,7 +51,7 @@ export default function ManageHardware() {
   return (
     <>
       <section className="py-5 px-10 container mx-auto">
-        <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
+        <h2 className="text-xl md:text-5xl text-center font-bold py-10">Оборудование</h2>
         <div className="left flex flex-col">
           <AddButton></AddButton>
           <Logout></Logout>
@@ -77,14 +75,22 @@ export default function ManageHardware() {
       <DescriptionModal
         text={descriptionText}
         open={open}
-        handleClose={() => setOpen(false)}
-        handleOpen={() => setOpen(true)}
+        handleClose={() => {
+          setOpen(false);
+        }}
+        handleOpen={() => {
+          setOpen(true);
+        }}
       />
       <EditModalHardware
         hardware={hardwareByIdQuery.data}
         open={openEdit}
-        handleClose={() => setOpenEdit(false)}
-        handleOpen={() => setOpenEdit(true)}
+        handleClose={() => {
+          setOpenEdit(false);
+        }}
+        handleOpen={() => {
+          setOpenEdit(true);
+        }}
       />
     </>
   );

@@ -11,10 +11,6 @@ import DescriptionModal from '../../components/table-with-pagination/Description
 import { DateTime } from 'luxon';
 import AddButton from '../../components/AddButton';
 
-export const metadata = {
-  title: 'Уязвимости оборудования',
-};
-
 async function getVulnerabilities() {
   const res = await fetch('/api/vulnerabilities/getAll');
   const vulnerabilities = (await res.json()) as Vulnerabilities;
@@ -85,7 +81,7 @@ export default function ManageVulnerabilities() {
   return (
     <>
       <section className="py-5 px-10 container mx-auto">
-        <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
+        <h2 className="text-xl md:text-5xl text-center font-bold py-10">Уязвимости оборудования</h2>
         <div className="left flex gap-3 flex-col">
           <AddButton></AddButton>
           <Logout></Logout>
@@ -102,7 +98,9 @@ export default function ManageVulnerabilities() {
               { title: 'Тип уязвимости', key: 'vuln_types' },
             ]}
             deleteHandler={deleteHandler}
-            onOpenEdit={() => console.log(5)}
+            onOpenEdit={() => {
+              console.log(5);
+            }}
             openDescriptionHandler={descriptionHandler}
             withDescription={'long_text_description'}
           />
@@ -111,8 +109,12 @@ export default function ManageVulnerabilities() {
       <DescriptionModal
         text={descriptionText}
         open={open}
-        handleClose={() => setOpen(false)}
-        handleOpen={() => setOpen(true)}
+        handleClose={() => {
+          setOpen(false);
+        }}
+        handleOpen={() => {
+          setOpen(true);
+        }}
       />
     </>
   );

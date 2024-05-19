@@ -12,10 +12,6 @@ import Select from 'react-select';
 import DescriptionModal from '../../components/table-with-pagination/DescriptionModal';
 import AddButton from '../../components/AddButton';
 
-export const metadata = {
-  title: 'Выбор уязвимостей по оборудованию',
-};
-
 export default function VulnerabilitiesForHardware() {
   const queryClient = useQueryClient();
   const [id, setId] = useState(-1);
@@ -55,7 +51,7 @@ export default function VulnerabilitiesForHardware() {
 
   return (
     <section className="py-5 px-10 container mx-auto">
-      <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
+      <h2 className="text-xl md:text-5xl text-center font-bold py-10">Выбор уязвимостей по оборудованию</h2>
       <div className="left flex flex-col">
         <AddButton></AddButton>
         <Logout></Logout>
@@ -77,14 +73,20 @@ export default function VulnerabilitiesForHardware() {
           ]}
           withDescription={'long_text_description'}
           openDescriptionHandler={descriptionHandler}
-          onOpenEdit={() => console.log(5)}
+          onOpenEdit={() => {
+            console.log(5);
+          }}
         />
       </Box>
       <DescriptionModal
         text={descriptionText}
         open={open}
-        handleClose={() => setOpen(false)}
-        handleOpen={() => setOpen(true)}
+        handleClose={() => {
+          setOpen(false);
+        }}
+        handleOpen={() => {
+          setOpen(true);
+        }}
       />
     </section>
   );
