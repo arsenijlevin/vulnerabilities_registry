@@ -1,19 +1,19 @@
-"use client"
+'use client';
 
 export async function deleteHardware(id: string | number) {
-  const res = await fetch("/api/hardware/delete", {
+  const res = await fetch('/api/hardware/delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      login: `${id}`
+      login: `${id}`,
     }),
   });
 
   if (res.status === 200) {
-    return "OK"
+    return 'OK';
   }
 
-  return "";
+  return '';
 }

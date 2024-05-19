@@ -1,8 +1,5 @@
-"use client"
-
+'use client';
 
 export default function SuccessPage() {
-  return (
-    <p>Запрос выполнен успешно!</p>
-  );
+  return <p>Запрос выполнен успешно!</p>;
 }

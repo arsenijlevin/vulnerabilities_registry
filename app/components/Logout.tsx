@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { Box, Button } from '@mui/material';
 import { setCookie } from 'cookies-next';
@@ -11,12 +11,12 @@ export default function Logout() {
   const handleLogout = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    setCookie("jwt", "", {
+    setCookie('jwt', '', {
       maxAge: -1,
-      path: "/",
-      sameSite: "strict",
-      secure: process.env.NODE_ENV === "production",
-    })
+      path: '/',
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
 
     router.push(`/login`);
   };

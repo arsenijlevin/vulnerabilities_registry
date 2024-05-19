@@ -1,18 +1,16 @@
-"use client"
-
+'use client';
 
 import { useRef } from 'react';
 
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation';
 import ClientOnly from './components/ClientOnly';
 import { LoginData } from '@api/auth/login/types';
 import { processLogin } from './lib/processLogin';
 import { setCookie } from 'cookies-next';
 
 export const metadata = {
-  title: 'Вход'
-}
-
+  title: 'Вход',
+};
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,33 +27,29 @@ export default function LoginPage() {
       return;
     }
 
-    const loginData : LoginData = {
+    const loginData: LoginData = {
       login: loginRef.current?.value,
       password: passwordRef.current?.value,
-    }
+    };
 
-    const jwt = await processLogin(loginData)
+    const jwt = await processLogin(loginData);
 
-
-    setCookie("jwt", jwt, {
+    setCookie('jwt', jwt, {
       maxAge: 60 * 60 * 4,
-      path: "/",
-      sameSite: "strict",
-      secure: process.env.NODE_ENV === "production",
-    })
+      path: '/',
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
 
     if (jwt) {
-      router.push("/")
+      router.push('/');
     }
-
-  }
+  };
 
   return (
     <ClientOnly>
       <section className="py-5 container mx-auto px-5 max-w-5xl">
-        <h2 className="text-xl md:text-5xl text-center font-bold py-10">
-          {metadata.title}
-        </h2>
+        <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
 
         {/* { isError && <Error message="Неправильный логин или пароль!"></Error>} */}
         {/* { isSuccess && <Success message="Вы успешно вошли в систему!"></Success>} */}
@@ -89,7 +83,7 @@ export default function LoginPage() {
               type="submit"
               className="flex justify-center items-center text-md w-1/3 bg-green-500 text-black px-4 py-2 border rounded-md hover:bg-gray-50 hover:border-green-500 hover:text-green-500"
             >
-            Войти
+              Войти
             </button>
           </form>
         </div>

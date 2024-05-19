@@ -1,8 +1,8 @@
-"use server"
+'use server';
 
-import { LoginData } from "@api/auth/login/types";
+import { LoginData } from '@api/auth/login/types';
 
-export async function processLogin(loginData : LoginData) {
+export async function processLogin(loginData: LoginData) {
   const response = await fetch(`${process.env.NEXTAUTH_URL}api/auth/login`, {
     method: 'POST',
     headers: {

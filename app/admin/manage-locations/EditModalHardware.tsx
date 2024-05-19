@@ -1,12 +1,12 @@
-"use client"
+'use client';
 
-import { Box, Button, FormControl, Modal, TextField, Typography } from "@mui/material";
-import { SingleHardware } from "../../api/hardware/get/route";
+import { Box, Button, FormControl, Modal, TextField, Typography } from '@mui/material';
+import { SingleHardware } from '../../api/hardware/get/route';
 import Select from 'react-select';
-import { getLocations } from "../manage-locations/lib/getLocations";
-import { useQueryOptions } from "../../../lib/useQueryOptions";
-import { useQuery } from "@tanstack/react-query";
-import { locations } from "@prisma/client";
+import { getLocations } from '../manage-locations/lib/getLocations';
+import { useQueryOptions } from '../../../lib/useQueryOptions';
+import { useQuery } from '@tanstack/react-query';
+import { locations } from '@prisma/client';
 
 const style = {
   position: 'absolute' as const,
@@ -25,18 +25,13 @@ const style = {
 // }
 
 interface Props {
-  open: boolean,
-  hardware: SingleHardware | null,
-  handleOpen: () => void,
-  handleClose: () => void
+  open: boolean;
+  hardware: SingleHardware | null;
+  handleOpen: () => void;
+  handleClose: () => void;
 }
 
-export default function EditModalHardware({
-  open,
-  hardware,
-  handleOpen,
-  handleClose
-}: Props) {
+export default function EditModalHardware({ open, hardware, handleOpen, handleClose }: Props) {
   // const queryClient = useQueryClient();
   // const refId = useRef<HTMLInputElement>(null);
   // const refName = useRef<HTMLInputElement>(null);
@@ -78,21 +73,16 @@ export default function EditModalHardware({
   //   }
   // );
 
-
-  const locationQuery = useQuery(
-    ["location"],
-    getLocations,
-    useQueryOptions
-  );
+  const locationQuery = useQuery(['location'], getLocations, useQueryOptions);
 
   const getLocationsLabels = (data: locations[]) => {
-    return data.map(location => {
+    return data.map((location) => {
       return {
         value: location.id,
-        label: location.name
-      }
-    },)
-  }
+        label: location.name,
+      };
+    });
+  };
 
   // const handleSubmit = () => {
   //   updateMutation.mutate(getDataToUpdate());
@@ -104,21 +94,21 @@ export default function EditModalHardware({
   if (locationQuery.isLoading) return <></>;
   if (locationQuery.isError || !locationQuery.data) return <></>;
 
-
   if (hardware == null) {
     return (
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Оборудование не найдено
           </Typography>
         </Box>
       </Modal>
-    )
+    );
   }
 
   return (
@@ -126,7 +116,8 @@ export default function EditModalHardware({
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description">
+      aria-describedby="modal-modal-description"
+    >
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2" marginBottom={2}>
           Редактирование оборудования
@@ -134,12 +125,23 @@ export default function EditModalHardware({
         <FormControl className="flex flex-col gap-10 w-full">
           <TextField label="Идентификатор" variant="standard" defaultValue={hardware.id} />
           <TextField label="Наименование" variant="standard" defaultValue={hardware.name} />
-          <Select noOptionsMessage={() => 'Не найдено'} placeholder="Выберите местоположения" isMulti options={getLocationsLabels(locationQuery.data)} />
+          <Select
+            noOptionsMessage={() => 'Не найдено'}
+            placeholder="Выберите местоположения"
+            isMulti
+            options={getLocationsLabels(locationQuery.data)}
+          />
 
-          <TextField multiline maxRows={50} label="Описание" variant="standard" defaultValue={hardware.long_text_description} />
+          <TextField
+            multiline
+            maxRows={50}
+            label="Описание"
+            variant="standard"
+            defaultValue={hardware.long_text_description}
+          />
           <Button>Отправить</Button>
         </FormControl>
       </Box>
     </Modal>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton, Tooltip } from '@mui/material';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 
 export default function TooltipModifyButton({ onClick }: { onClick: () => void }) {
@@ -8,5 +8,5 @@ export default function TooltipModifyButton({ onClick }: { onClick: () => void }
         <BorderColorIcon />
       </IconButton>
     </Tooltip>
-  )
+  );
 }

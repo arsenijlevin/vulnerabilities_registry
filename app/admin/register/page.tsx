@@ -1,18 +1,18 @@
-"use client"
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import { LoginData } from "@api/auth/login/types";
-import { processRegister } from "./lib/processRegister";
-import ClientOnly from "../../login/components/ClientOnly";
-import { useQuery } from "@tanstack/react-query";
-import { rights } from "@prisma/client";
-import { getRights } from "./lib/getRights";
-import { useQueryOptions } from "@lib/useQueryOptions";
-import Select from "react-select";
+'use client';
+import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
+import { LoginData } from '@api/auth/login/types';
+import { processRegister } from './lib/processRegister';
+import ClientOnly from '../../login/components/ClientOnly';
+import { useQuery } from '@tanstack/react-query';
+import { rights } from '@prisma/client';
+import { getRights } from './lib/getRights';
+import { useQueryOptions } from '@lib/useQueryOptions';
+import Select from 'react-select';
 
 export const metadata = {
-  title: "Регистрация"
-}
+  title: 'Регистрация',
+};
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,54 +20,43 @@ export default function LoginPage() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const [rights, setRights] = useState<number>(-1);
 
-
-  const rightsQuery = useQuery(
-    ["rights"],
-    getRights,
-    useQueryOptions
-  );
+  const rightsQuery = useQuery(['rights'], getRights, useQueryOptions);
 
   const getRightsLabels = (data: rights[]) => {
-    return data.map(right => {
+    return data.map((right) => {
       return {
         value: right.id,
-        label: right.title
-      }
-    },)
-  }
+        label: right.title,
+      };
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const loginData: LoginData = {
-      login: loginRef.current?.value || "",
-      password: passwordRef.current?.value || "",
-      rights_id: rights
-    }
+      login: loginRef.current?.value || '',
+      password: passwordRef.current?.value || '',
+      rights_id: rights,
+    };
 
     if (!loginData.login || !loginData.password) {
       return;
     }
 
-
-    const jwt = await processRegister(loginData)
-
-
+    const jwt = await processRegister(loginData);
 
     if (jwt.login) {
-      router.push("/success")
+      router.push('/success');
     }
+  };
 
-  }
-
-  if (!rightsQuery.data) return <></>
+  if (!rightsQuery.data) return <></>;
 
   return (
     <ClientOnly>
       <section className="py-5 container mx-auto px-5 max-w-5xl">
-        <h2 className="text-xl md:text-5xl text-center font-bold py-10">
-          {metadata.title}
-        </h2>
+        <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
 
         {/* { isError && <Error message="Неправильный логин или пароль!"></Error>} */}
         {/* { isSuccess && <Success message="Вы успешно вошли в систему!"></Success>} */}
@@ -97,7 +86,12 @@ export default function LoginPage() {
             </div>
             <div className="container flex justify-between py-5 flex-col gap-2 w-96">
               <h3>Права: </h3>
-              <Select onChange={(choice) => setRights(choice?.value || -1)} noOptionsMessage={() => 'Не найдено'} placeholder="Права" options={getRightsLabels(rightsQuery.data)} />
+              <Select
+                onChange={(choice) => setRights(choice?.value || -1)}
+                noOptionsMessage={() => 'Не найдено'}
+                placeholder="Права"
+                options={getRightsLabels(rightsQuery.data)}
+              />
             </div>
             <button
               type="submit"

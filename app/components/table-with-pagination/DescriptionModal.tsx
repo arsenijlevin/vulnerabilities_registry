@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Modal, Typography } from '@mui/material';
 
 const style = {
   position: 'absolute' as const,
@@ -14,10 +14,10 @@ const style = {
 };
 
 interface Props {
-  text: string,
-  open: boolean,
-  handleOpen: () => void,
-  handleClose: () => void
+  text: string;
+  open: boolean;
+  handleOpen: () => void;
+  handleClose: () => void;
 }
 
 export default function DescriptionModal({ text, open, handleOpen, handleClose }: Props) {
@@ -26,7 +26,8 @@ export default function DescriptionModal({ text, open, handleOpen, handleClose }
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description">
+      aria-describedby="modal-modal-description"
+    >
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Описание уязвимости
@@ -36,5 +37,5 @@ export default function DescriptionModal({ text, open, handleOpen, handleClose }
         </Typography>
       </Box>
     </Modal>
-  )
+  );
 }

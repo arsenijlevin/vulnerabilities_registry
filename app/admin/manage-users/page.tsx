@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Logout from '@app/components/Logout';
 import { Box } from '@mui/material';
@@ -10,40 +10,28 @@ import { deleteUser } from './lib/deleteUser';
 import AddButton from '../../components/AddButton';
 
 export const metadata = {
-  title: 'Управление пользователями'
-}
+  title: 'Управление пользователями',
+};
 
 export default function ManageUsers() {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery(
-    ["users"],
-    getUsers,
-    useQueryOptions
-  );
-
-
+  const { data, isLoading, isError } = useQuery(['users'], getUsers, useQueryOptions);
 
   const deleteHandler = async (deleteLogin: string | number) => {
-
     await deleteUser(deleteLogin);
 
-    await queryClient.prefetchQuery(["users"], getUsers);
+    await queryClient.prefetchQuery(['users'], getUsers);
 
     // if (deleteKey === userToUpdate?.login) setFormMode('add');
-
-  }
+  };
 
   if (isLoading) return <></>;
   if (isError || !data) return <></>;
 
-
   return (
-
     <section className="py-5 px-10 container mx-auto">
-      <h2 className="text-xl md:text-5xl text-center font-bold py-10">
-        {metadata.title}
-      </h2>
+      <h2 className="text-xl md:text-5xl text-center font-bold py-10">{metadata.title}</h2>
       <div className="left flex flex-col">
         <AddButton></AddButton>
         <Logout></Logout>
@@ -53,15 +41,14 @@ export default function ManageUsers() {
           tableContent={data}
           primaryKey="login"
           headers={[
-            { title: "Логин", key: "login" },
-            { title: "Пароль", key: "password" },
-            { title: "Права", key: "rights_id" },
+            { title: 'Логин', key: 'login' },
+            { title: 'Пароль', key: 'password' },
+            { title: 'Права', key: 'rights_id' },
           ]}
           deleteHandler={deleteHandler}
-          onOpenEdit={() => console.log(5)} />
+          onOpenEdit={() => console.log(5)}
+        />
       </Box>
-
     </section>
-
-  )
+  );
 }

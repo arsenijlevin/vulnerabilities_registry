@@ -3,5 +3,5 @@ export default function TestComponent() {
     <div>
       <h1>Test Component</h1>
     </div>
-  )
+  );
 }

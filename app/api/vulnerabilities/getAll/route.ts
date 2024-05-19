@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-import { prisma, Prisma } from "@prisma/prismadb";
+import { prisma, Prisma } from '@prisma/prismadb';
 
-export type Vulnerabilities = Prisma.PromiseReturnType<typeof getAllVulnerabilities>
+export type Vulnerabilities = Prisma.PromiseReturnType<typeof getAllVulnerabilities>;
 
 const getAllVulnerabilities = async () => {
   const vulnerabilities = await prisma.vulnerabilities.findMany({
@@ -11,16 +11,16 @@ const getAllVulnerabilities = async () => {
         include: {
           vuln_types_list: {
             select: {
-              title: true
-            }
-          }
+              title: true,
+            },
+          },
         },
-      }
-    }
+      },
+    },
   });
-  
+
   return vulnerabilities;
-}
+};
 
 export async function GET() {
   const vulnerabilities = await getAllVulnerabilities();

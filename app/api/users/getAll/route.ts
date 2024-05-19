@@ -1,22 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-import { exclude, prisma, Prisma } from "@prisma/prismadb";
+import { exclude, prisma, Prisma } from '@prisma/prismadb';
 
-export type UsersWithRights = Prisma.PromiseReturnType<typeof getAllUsersWithRights>
+export type UsersWithRights = Prisma.PromiseReturnType<typeof getAllUsersWithRights>;
 
 const getAllUsersWithRights = async () => {
   const users = await prisma.users.findMany({
     include: {
       rights: {
         select: {
-          title: true
-        }
+          title: true,
+        },
       },
     },
   });
 
-  return users.map((user) => exclude(user, ["rights_id"]));
-}
+  return users.map((user) => exclude(user, ['rights_id']));
+};
 
 export async function GET() {
   const users = await getAllUsersWithRights();
