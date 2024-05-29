@@ -1,41 +1,36 @@
-import { compare } from "bcrypt";
-import { sign, Secret } from 'jsonwebtoken';
-import { NextRequest, NextResponse } from 'next/server'
-import { LoginData, SessionUser } from "./types";
-import { prisma } from "@prisma/prismadb";
+import { compare } from 'bcrypt';
 
+import { NextRequest, NextResponse } from 'next/server';
+
+import { prisma } from '@prisma/prismadb';
+import { SessionPayload, createSession } from '@lib/session';
+import { LoginData } from '../types';
+
+export interface LoginResponse {
+  token: string;
+}
 
 export async function POST(request: NextRequest) {
-  const { login, password } : LoginData = await request.json();
-    
+  const { login, password } = (await request.json()) as LoginData;
+
   const user = await prisma.users.findFirst({
     where: {
-      login: login
-    }
+      login: login,
+    },
   });
 
-  if (!user) return new NextResponse("Incorrect credentials", { status: 400 });
+  if (!user) return new NextResponse('Incorrect credentials', { status: 400 });
 
-  const isPasswordCorrect = await compare(
-    password,
-    user.password
-  );
+  const isPasswordCorrect = await compare(password, user.password);
 
-  if (!isPasswordCorrect) new NextResponse("Incorrect credentials", { status: 400 });
+  if (!isPasswordCorrect) new NextResponse('Incorrect credentials', { status: 400 });
 
-  const sessionUser : SessionUser = {
+  const sessionUser: SessionPayload = {
     login: user.login,
-    rights_id: user.rights_id
+    rights_id: user.rights_id.toString(),
   };
 
-  const token = sign(sessionUser, process.env.SECRET_KEY as Secret, {
-    expiresIn: '4h',
-    algorithm: "HS512"
-  });
+  const token = await createSession(sessionUser);
 
-  const serializedToken = JSON.stringify(token);
-
-  return new NextResponse(serializedToken, {
-    status: 200,
-  });
+  return NextResponse.json({ token } as LoginResponse);
 }
