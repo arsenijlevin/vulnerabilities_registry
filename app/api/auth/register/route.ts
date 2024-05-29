@@ -2,24 +2,20 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 
 import { prisma } from '@prisma/prismadb';
+import { LoginData } from '../types';
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as {
-    login: string;
-    password: string;
-    rights_id: number;
-  };
-  const { login, rights_id } = body;
+  const { login, password, rights_id } = (await request.json()) as LoginData;
 
-  const password = await bcrypt.hash(body.password, 12);
+  const passwordHash = await bcrypt.hash(password, 12);
 
   const user = await prisma.users.create({
     data: {
       login,
-      password,
+      password: passwordHash,
       rights_id,
     },
   });
 
-  return NextResponse.json(user);
+  return NextResponse.json(user, { status: 201 });
 }

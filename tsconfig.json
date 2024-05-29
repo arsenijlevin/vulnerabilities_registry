@@ -25,6 +25,8 @@
             "@api/*": ["./app/api/*"],
             "@lib/*": ["./lib/*"],
             "@prisma/*": ["./prisma/*"],
+            "@components/*": ["./components/*"],
+            "@hooks/*": ["./hooks/*"]
         }
     },
     "include": [
@@ -32,7 +34,7 @@
         "**/*.ts",
         "**/*.tsx",
         "./*.*.js",
-        ".next/types/**/*.ts"
-    ],
+        ".next/types/**/*.ts" ,
+        "middleware.ts"],
     "exclude": ["node_modules"]
 }

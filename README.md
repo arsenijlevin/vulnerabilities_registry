@@ -3,7 +3,7 @@
 ```
 DATABASE_URL=postgres://<login>:<password>@<host>:<port>/<dbname>
 NEXTAUTH_URL=http://localhost:3000/
-SECRET_KEY=verysecretkey
+SESSION_SECRET=verysecretkey
 ```
 
 ## Запуск
