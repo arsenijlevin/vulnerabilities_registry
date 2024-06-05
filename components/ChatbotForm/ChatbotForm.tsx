@@ -29,6 +29,7 @@ export type ChatbotModel = (typeof chatbotModels)[number];
 
 export interface ChatbotFormProps {
   disclosure: [boolean, Disclosure];
+  type: 'vuln' | 'hardware';
 }
 
 export const ChatbotForm = (props: ChatbotFormProps) => {
@@ -64,7 +65,7 @@ export const ChatbotForm = (props: ChatbotFormProps) => {
       <Box sx={style}>
         <Typography variant="body1">Создание запроса для уязвимости:</Typography>
         <Typography variant="body1" fontStyle={'italic'}>
-          Nginx UI. Атака CRLF (202423828)
+          {vuln.title}
         </Typography>
         <p className="my-4 flex items-center">
           Скопировать описание
