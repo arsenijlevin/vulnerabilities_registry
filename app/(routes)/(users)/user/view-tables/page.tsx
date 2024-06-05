@@ -10,8 +10,10 @@ import Logout from '@components/Logout';
 import { Vulnerability, VulnerabilityDTO } from '@/dto/VulnerabilityDTO';
 import { ChatbotForm } from '@components/ChatbotForm/ChatbotForm';
 import { DataTable } from '@/components/DataTable';
-import { useState } from 'react';
 import { useDisclosure } from '@/hooks/useDisclosure';
+import { TableDataDescriptionModal } from '@/components/DataTable/TableDataDescriptionModal';
+
+type InfoToView = 'vulnerabilities' | 'hardware' | 'locations';
 
 async function deleteVulnerability(id: number) {
   const deleteResponse = await fetch(`/api/vulnerability/${id.toString()}`, {
@@ -90,6 +92,71 @@ export default function ManageVulnerabilities() {
           />
         </Box>
         <ChatbotForm disclosure={disclosure} />
+      </section>
+
+      <section className="py-5 px-10 container mx-auto">
+        <h2 className="text-xl md:text-5xl text-center font-bold py-10">Оборудование</h2>
+        <div className="left flex flex-col">
+          <AddButton></AddButton>
+          <Logout></Logout>
+        </div>
+        <Box>
+          <DataTable
+            tableContent={hardwareAllQuery.data}
+            primaryKey="id"
+            headers={[
+              { title: 'Идентификатор', key: 'id' },
+              { title: 'Наименование', key: 'name' },
+              { title: 'Местонахождение', key: 'location' },
+            ]}
+            deleteHandler={deleteHandler}
+            onOpenEdit={onEditOpen}
+            withDescription
+            openDescriptionHandler={descriptionHandler}
+          />
+        </Box>
+      </section>
+      <TableDataDescriptionModal
+        text={descriptionText}
+        open={open}
+        handleClose={() => {
+          setOpen(false);
+        }}
+        handleOpen={() => {
+          setOpen(true);
+        }}
+      />
+      <EditModalHardware
+        hardware={hardwareByIdQuery.data}
+        open={openEdit}
+        handleClose={() => {
+          setOpenEdit(false);
+        }}
+        handleOpen={() => {
+          setOpenEdit(true);
+        }}
+      />
+      <section className="py-5 px-10 container mx-auto">
+        <h2 className="text-xl md:text-5xl text-center font-bold py-10">Местоположения оборудования</h2>
+        <div className="left flex flex-col">
+          <AddButton></AddButton>
+          <Logout></Logout>
+        </div>
+        <Box>
+          <DataTable
+            tableContent={data}
+            primaryKey="id"
+            headers={[
+              { title: 'Идентификатор', key: 'id' },
+              { title: 'Название', key: 'name' },
+              { title: 'Описание', key: 'description' },
+            ]}
+            deleteHandler={deleteHandler}
+            onOpenEdit={() => {
+              console.log(5);
+            }}
+          />
+        </Box>
       </section>
     </>
   );

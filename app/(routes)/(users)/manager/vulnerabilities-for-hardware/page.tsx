@@ -3,13 +3,13 @@
 import Logout from '@components/Logout';
 import { Box, CircularProgress } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import TableWithPagination, { TableDataType } from '@components/table-with-pagination/TableWithPagination';
+import { TableDataType, DataTable } from '@components/DataTable';
 import { useQueryOptions } from '@lib/useQueryOptions';
 import { getVulnerabilitiesForHardware } from './lib/getVulnerabilitiesForHardware';
 import { useState } from 'react';
 
 import Select from 'react-select';
-import DescriptionModal from '@components/table-with-pagination/DescriptionModal';
+
 import AddButton from '@components/AddButton';
 import { getHardware } from '@/app/(routes)/(users)/admin/manage-hardware/lib/getHardware';
 
@@ -68,7 +68,7 @@ export default function VulnerabilitiesForHardware() {
         {isLoading ? (
           <CircularProgress className="m-auto" />
         ) : (
-          <TableWithPagination
+          <DataTable
             tableContent={vulnQuery.data as unknown as TableDataType[]}
             primaryKey="id"
             headers={[
@@ -76,27 +76,16 @@ export default function VulnerabilitiesForHardware() {
               { title: 'Название', key: 'name' },
               { title: 'Тип', key: 'vuln_type' },
             ]}
-            withDescription={'long_text_description'}
-            openDescriptionHandler={descriptionHandler}
-            onOpenEdit={() => {
-              console.log(5);
-            }}
-            deleteHandler={() => {
-              console.log(123);
+            withDescription
+            deleteProps={{
+              handler: () => {
+                console.log('asd');
+              },
+              isLoading: false,
             }}
           />
         )}
       </Box>
-      <DescriptionModal
-        text={descriptionText}
-        open={open}
-        handleClose={() => {
-          setOpen(false);
-        }}
-        handleOpen={() => {
-          setOpen(true);
-        }}
-      />
     </section>
   );
 }

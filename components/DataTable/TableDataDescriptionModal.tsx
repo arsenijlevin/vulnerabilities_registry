@@ -13,14 +13,16 @@ const style = {
   p: 4,
 };
 
-interface Props {
+export interface TableDataDescriptionModalProps {
+  title: string;
   text: string;
   open: boolean;
-  handleOpen: () => void;
   handleClose: () => void;
 }
 
-export default function DescriptionModal({ text, open, handleOpen, handleClose }: Props) {
+export function TableDataDescriptionModal(props: TableDataDescriptionModalProps) {
+  const { title, text, open, handleClose } = props;
+
   return (
     <Modal
       open={open}
@@ -30,7 +32,7 @@ export default function DescriptionModal({ text, open, handleOpen, handleClose }
     >
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          Описание уязвимости
+          {title}
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2 }} className="whitespace-pre-line">
           {text}
