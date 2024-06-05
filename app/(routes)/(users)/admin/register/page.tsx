@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 
 import { processRegister } from './lib/processRegister';
 
@@ -9,7 +9,7 @@ import { rights } from '@prisma/client';
 import { getRights } from './lib/getRights';
 import { useQueryOptions } from '@lib/useQueryOptions';
 import Select from 'react-select';
-import ClientOnly from '@/app/(routes)/(auth)/login/components/ClientOnly';
+import ClientOnly from '@/components/utils/ClientOnly';
 import { LoginData } from '@/app/api/auth/types';
 
 export default function LoginPage() {
@@ -29,7 +29,7 @@ export default function LoginPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const loginData: LoginData = {

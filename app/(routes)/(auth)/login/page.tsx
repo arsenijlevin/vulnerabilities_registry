@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 
 import { useRouter } from 'next/navigation';
-import ClientOnly from './components/ClientOnly';
+import ClientOnly from '../../../../components/utils/ClientOnly';
 import { LoginData } from '@api/auth/types';
 import { processLogin } from './lib/processLogin';
 import { setCookie } from 'cookies-next';
@@ -13,7 +13,7 @@ export default function LoginPage() {
   const loginRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const login = loginRef.current?.value;

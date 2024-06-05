@@ -3,7 +3,7 @@
 import Logout from '@components/Logout';
 import { Box } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import TableWithPagination from '@components/table-with-pagination/TableWithPagination';
+import { DataTable } from '@components/DataTable';
 import { useQueryOptions } from '@/lib/useQueryOptions';
 import { getUsers } from './lib/getUsers';
 import { deleteUser } from './lib/deleteUser';
@@ -33,7 +33,7 @@ export default function ManageUsers() {
         <Logout></Logout>
       </div>
       <Box>
-        <TableWithPagination
+        <DataTable
           tableContent={data}
           primaryKey="login"
           headers={[

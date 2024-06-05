@@ -35,6 +35,7 @@ model vulnerabilities {
   name                  String
   discovery_date        DateTime?       @db.Date
   is_fixed              Boolean?
+  severity              String?
   long_text_description String?
   vuln_hardware         vuln_hardware[]
   vuln_types            vuln_types[]

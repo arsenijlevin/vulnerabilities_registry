@@ -6,7 +6,9 @@ export const metadata = {
   description: 'Реестр уязвимостей оборудования',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+import { ReactNode } from 'react';
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ru">
       <body>

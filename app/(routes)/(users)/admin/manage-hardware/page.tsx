@@ -3,11 +3,11 @@
 import Logout from '@components/Logout';
 import { Box } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import TableWithPagination from '@components/table-with-pagination/TableWithPagination';
+import { DataTable } from '@components/DataTable';
 import { useQueryOptions } from '@lib/useQueryOptions';
 import { useState } from 'react';
 import EditModalHardware from './EditModalHardware';
-import DescriptionModal from '@components/table-with-pagination/DescriptionModal';
+
 import { getHardware } from './lib/getHardware';
 import { getHardwareById } from './lib/getHardwareById';
 import { deleteHardware } from './lib/deleteHardware';
@@ -56,7 +56,7 @@ export default function ManageHardware() {
           <Logout></Logout>
         </div>
         <Box>
-          <TableWithPagination
+          <DataTable
             tableContent={hardwareAllQuery.data}
             primaryKey="id"
             headers={[
@@ -66,12 +66,12 @@ export default function ManageHardware() {
             ]}
             deleteHandler={deleteHandler}
             onOpenEdit={onEditOpen}
-            withDescription="long_text_description"
+            withDescription
             openDescriptionHandler={descriptionHandler}
           />
         </Box>
       </section>
-      <DescriptionModal
+      <TableDataDescriptionModal
         text={descriptionText}
         open={open}
         handleClose={() => {

@@ -1,94 +1,77 @@
 'use client';
 
-import Logout from '@components/Logout';
 import { Box } from '@mui/material';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import TableWithPagination from '@components/table-with-pagination/TableWithPagination';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { useQueryOptions } from '@lib/useQueryOptions';
-import { Vulnerabilities } from '../../api/vulnerabilities/getAll/route';
-import { useState } from 'react';
-import DescriptionModal from '@components/table-with-pagination/DescriptionModal';
-import { DateTime } from 'luxon';
+
 import AddButton from '@components/AddButton';
+import Logout from '@components/Logout';
+import { Vulnerability, VulnerabilityDTO } from '@/dto/VulnerabilityDTO';
+import { ChatbotForm } from '@components/ChatbotForm/ChatbotForm';
+import { DataTable } from '@/components/DataTable';
+import { useState } from 'react';
+import { useDisclosure } from '@/hooks/useDisclosure';
 
-async function getVulnerabilities() {
-  const res = await fetch('/api/vulnerabilities/getAll');
-  const vulnerabilities = (await res.json()) as Vulnerabilities;
-
-  const vulnerabilitiesWithStringTypes = vulnerabilities.map((vulnerability) => {
-    let discoveryDateString = '';
-
-    if (!vulnerability.discovery_date) {
-      discoveryDateString = 'Неизвестно';
-    } else {
-      const luxonDate = DateTime.fromJSDate(new Date(vulnerability.discovery_date));
-      discoveryDateString = luxonDate.toLocaleString(DateTime.DATE_FULL, { locale: 'ru' });
-    }
-
-    return {
-      ...vulnerability,
-      long_text_description: vulnerability.long_text_description ?? '',
-      is_fixed: vulnerability.is_fixed ?? false,
-      discovery_date: discoveryDateString,
-      vuln_types: vulnerability.vuln_types.map((vuln_type) => vuln_type.vuln_types_list.title).join(', '),
-    };
-  });
-
-  return vulnerabilitiesWithStringTypes;
-}
-
-async function deleteVulnerability(id: string | number) {
-  const res = await fetch('/api/vulnerabilities/delete', {
-    method: 'POST',
+async function deleteVulnerability(id: number) {
+  const deleteResponse = await fetch(`/api/vulnerability/${id.toString()}`, {
+    method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      login: `${id}`,
-    }),
   });
 
-  if (res.status === 200) {
-    return 'OK';
-  }
+  return deleteResponse;
+}
 
-  return '';
+async function getVulnerabilities() {
+  const response = await fetch('/api/vulnerability', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const vulnerabilities = (await response.json()) as Vulnerability[];
+
+  console.log(vulnerabilities);
+
+  return vulnerabilities;
 }
 
 export default function ManageVulnerabilities() {
   const queryClient = useQueryClient();
-  const [open, setOpen] = useState(false);
-  const [descriptionText, setDescriptionText] = useState('');
 
   const { data, isLoading, isError } = useQuery(['vulnerabilities'], getVulnerabilities, useQueryOptions);
+  const disclosure = useDisclosure(true);
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => {
+      return deleteVulnerability(id);
+    },
+  });
 
-  const descriptionHandler = (isOpen: boolean, text: string) => {
-    setOpen(isOpen);
-    setDescriptionText(text);
-  };
-
-  const deleteHandler = async (id: string | number) => {
-    await deleteVulnerability(id);
+  const deleteHandler = async (id: number | string) => {
+    deleteMutation.mutate(parseInt(id.toString()));
 
     await queryClient.prefetchQuery(['vulnerabilities'], getVulnerabilities);
-
-    // if (deleteKey === userToUpdate?.login) setFormMode('add');
   };
 
-  if (isLoading) return <></>;
-  if (isError || !data) return <></>;
+  if (isLoading) return <>Loading...</>;
+  if (isError) return <>Error!</>;
 
   return (
     <>
       <section className="py-5 px-10 container mx-auto">
-        <h2 className="text-xl md:text-5xl text-center font-bold py-10">Уязвимости оборудования</h2>
+        <h2 className="text-xl md:text-5xl text-center font-bold pb-10">Уязвимости оборудования</h2>
         <div className="left flex gap-3 flex-col">
           <AddButton></AddButton>
           <Logout></Logout>
         </div>
         <Box>
-          <TableWithPagination
-            tableContent={data}
+          <DataTable
+            tableContent={data
+              .map((vulnerability) => new VulnerabilityDTO(vulnerability).toTable())
+              .sort((a, b) => b.id - a.id)}
             primaryKey="id"
             headers={[
               { title: 'Идентификатор', key: 'id' },
@@ -96,26 +79,18 @@ export default function ManageVulnerabilities() {
               { title: 'Дата обнаружения', key: 'discovery_date' },
               { title: 'Состояние исправления', key: 'is_fixed' },
               { title: 'Тип уязвимости', key: 'vuln_types' },
+              { title: 'Описание', key: 'description' },
             ]}
-            deleteHandler={deleteHandler}
-            onOpenEdit={() => {
-              console.log(5);
+            deleteProps={{
+              isLoading: deleteMutation.isLoading,
+              handler: deleteHandler,
             }}
-            openDescriptionHandler={descriptionHandler}
-            withDescription="long_text_description"
+            withDescription
+            descriptionTitle="Описание уязвимости"
           />
         </Box>
+        <ChatbotForm disclosure={disclosure} />
       </section>
-      <DescriptionModal
-        text={descriptionText}
-        open={open}
-        handleClose={() => {
-          setOpen(false);
-        }}
-        handleOpen={() => {
-          setOpen(true);
-        }}
-      />
     </>
   );
 }

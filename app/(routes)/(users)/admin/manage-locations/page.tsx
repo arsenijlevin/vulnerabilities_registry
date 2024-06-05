@@ -3,7 +3,7 @@
 import Logout from '@components/Logout';
 import { Box } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import TableWithPagination from '@components/table-with-pagination/TableWithPagination';
+import { DataTable } from '@components/DataTable';
 import { useQueryOptions } from '@lib/useQueryOptions';
 import { getLocations } from './lib/getLocations';
 import AddButton from '@components/AddButton';
@@ -50,7 +50,7 @@ export default function ManageLocations() {
         <Logout></Logout>
       </div>
       <Box>
-        <TableWithPagination
+        <DataTable
           tableContent={data}
           primaryKey="id"
           headers={[
